@@ -5,8 +5,10 @@ class PublicLink < ApplicationRecord
 
   before_save :add_expire_at
 
+  scope :valid_links, -> {where(expire_at: [Time.now...])}
+
   private
   def add_expire_at
-    self.created_at = Time.zone.now + VALID_FOR
+    self.expire_at = Time.zone.now + VALID_FOR
   end
 end

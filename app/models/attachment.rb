@@ -3,6 +3,6 @@ class Attachment < ApplicationRecord
   has_many :public_links, dependent: :destroy
 
   def key
-    public_links.order(created_at: :desc).first&.key
+    public_links.valid_links.order(expire_at: :desc).first&.key
   end
 end

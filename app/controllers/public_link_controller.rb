@@ -18,8 +18,8 @@ class PublicLinkController < ApplicationController
   end
 
   def show
-    if (public_link = PublicLink.find_by(key: params[:key]))
-      @attachment = public_link&.attachment
+    if (public_link = PublicLink.find_by(key: params[:key], expire_at: [Time.now...]))
+      @attachment = public_link.attachment
       @user = @attachment&.user
       result = download_attachment
       render plain: result[:message], status: result[:status]
