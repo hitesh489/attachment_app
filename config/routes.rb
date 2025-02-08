@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :attachments, only: [:index, :show, :new, :create, :destroy] do
     member do
       get :download
-      get :generate_public_link, to: "public_link#generate_public_link"
+      post :generate_public_link, to: "public_link#generate_public_link"
     end
   end
 

@@ -7,7 +7,6 @@ class PublicLinkController < ApplicationController
   allow_unauthenticated_access only: [:show]
 
   def generate_public_link
-    binding.pry
     key = nil
     loop do
       key = SecureRandom.hex(16)
@@ -15,7 +14,7 @@ class PublicLinkController < ApplicationController
     end
 
     public_link = PublicLink.create(key:, attachment: @attachment)
-    render "attachments/show"
+    redirect_to attachment_path(@attachment)
   end
 
   def show

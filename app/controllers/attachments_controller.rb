@@ -54,7 +54,7 @@ class AttachmentsController < ApplicationController
   end
 
   def destroy
-    FileUtils.rm(file_path)
+    FileUtils.rm(file_path) if File.exist?(file_path)
     @attachment.destroy!
     redirect_to attachments_path, status: :see_other, notice: "Attachment was successfully destroyed."
   end

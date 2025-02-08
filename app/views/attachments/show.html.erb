@@ -9,7 +9,9 @@
 
   <%= link_to "Download attachment", download_attachment_path %>
   <%= button_to "Destroy this attachment", @attachment, method: :delete %>
-  <%= link_to "Share attachment", generate_public_link_attachment_path %>
+  <%= form_with url: generate_public_link_attachment_path(@attachment), method: :post, remote: true do |form| %>
+    <%= form.submit "Generate Public URL" %>
+  <% end %>
 
 </div>
 
@@ -18,3 +20,5 @@
     Public Link: <%= public_link_url @attachment.key %>
   <% end %>
 </div>
+
+<div id="public-url-container"></div>
