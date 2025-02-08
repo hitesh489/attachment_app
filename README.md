@@ -19,6 +19,25 @@
 ER diagram excluding authentication Models
 ![img_1.png](img_1.png)
 
+## Thought Process
+### Entity Relations
+1. One-to-many relation between user and attachment.
+2. One-to-many relation between attachment and public_links
+3. Created separate entity to store public urls for following reasons
+   1. Not all attachments will be made publicly available, hence it make more sense to add record for only attachment which are made public
+   2. Can generate multiple public urls for single attachment
+
+### File storage
+1. Stored file metadata in `Attachment` model
+2. Files are stored in `public/uploads/:user_id/` directory
+3. This allows application to search for files faster.
+4. Prepended `attachment_id` to file name to make it unique.
+5. Using this pattern files can also be uploaded to other storages such as S3.
+
+### Public url
+1. Made validity of public urls time bound using `expire_at` attribute.
+2. It will be set as per `VALID_FOR` constant defined in `public_link.rb`
+
 ## Naviagation
 1. All attachments
    1. User can login with email and password.
@@ -41,3 +60,4 @@ ER diagram excluding authentication Models
    3. `show` page will show public url if valid one is already present.
    4. User can re-generate public url, although this will not invalided previous url 
    (as person with previous url should be able to download attachment)
+
