@@ -4,18 +4,28 @@
   </div>
 <% end %>
 <p style="color: green"><%= notice %></p>
+<p style="color: red"><%= alert %></p>
 
 <% content_for :title, "Attachments" %>
 
 <h1>Attachments</h1>
 
 <div id="attachments">
-  <% @attachments.each do |attachment| %>
-    <%= render attachment %>
-    <p>
-      <%= link_to "Show this attachment", attachment %>
-    </p>
-  <% end %>
+  <table>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Action</th>
+    </tr>
+    
+    <% @attachments.each do |attachment| %>
+      <tr>
+        <td><%= attachment.id %></td>
+        <td><%= attachment.title %></td>
+        <td><%= link_to "Show this attachment", attachment %></td>
+      </tr>
+    <% end %>
+  </table>
 </div>
 
 <%= link_to "New attachment", new_attachment_path %>

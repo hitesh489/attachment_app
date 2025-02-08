@@ -1,7 +1,6 @@
 class AttachmentsController < ApplicationController
-  ROOT_PATH = Rails.root.join("public", "uploads")
-
   include AttachmentConcern
+  include AttachmentsHelper
 
   before_action :set_attachment, only: %i[ show destroy download ]
 
@@ -21,12 +20,11 @@ class AttachmentsController < ApplicationController
 
   def download
     if @attachment&.user == @user
-      if File.exist?(file_path)
-        send_file file_path, filename: @attachment.file_name, type: "application/octet-stream", disposition: "attachment"
-        # TODO fix this message
-        render :show, notice: "Attachment downloaded successfully.", status: :ok
+      result = download_attachment
+      if result[:success]
+        render :show, status: result[:status], notice: result[:message]
       else
-        render plain: "Attachment not found", status: 404
+        render plain: result[:message], status: result[:status]
       end
     else
       render plain: "You are not authorized to access this attachment.", status: :unauthorized
@@ -52,23 +50,16 @@ class AttachmentsController < ApplicationController
     else
       @attachment.errors.add(:file, "can't be blank")
     end
-    binding.pry
     render :new, status: 422
   end
 
   def destroy
+    FileUtils.rm(file_path)
     @attachment.destroy!
     redirect_to attachments_path, status: :see_other, notice: "Attachment was successfully destroyed."
   end
 
   private
-
-  def file_path
-    dir = ROOT_PATH.join(@user.id.to_s)
-    FileUtils.mkdir_p(dir) unless File.exist?(dir)
-
-    dir.join(@attachment.id.to_s + "_" + @attachment.file_name)
-  end
 
   # Only allow a list of trusted parameters through.
   def attachment_params

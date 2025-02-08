@@ -1,16 +1,20 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @attachment %>
+<p style="color: green">
+<!--  Fix notice when attachment is downloaded-->
+  <%= notice %>
+</p>
 
 <div>
   <%= link_to "Back to attachments", attachments_path %>
+  <%= render @attachment %>
 
-  <%= button_to "Destroy this attachment", @attachment, method: :delete %>
   <%= link_to "Download attachment", download_attachment_path %>
-  <%= link_to "Share attachment", generate_public_link_attachment_path %>>
+  <%= button_to "Destroy this attachment", @attachment, method: :delete %>
+  <%= link_to "Share attachment", generate_public_link_attachment_path %>
 
 </div>
 
 <div>
-  Public Link: <%= public_link_url @attachment.key %>
+  <% if @attachment.key %>
+    Public Link: <%= public_link_url @attachment.key %>
+  <% end %>
 </div>

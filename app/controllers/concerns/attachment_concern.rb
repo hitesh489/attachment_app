@@ -6,8 +6,9 @@ module AttachmentConcern
 
   private
   def set_attachment
-    # TODO handle if attachment not found
-    @attachment = Attachment.find(params.expect(:id))
+    @attachment = Attachment.find_by(id: params.expect(:id))
+    if @attachment.nil?
+      redirect_to attachments_path, alert: "Attachment not found"
+    end
   end
-
 end
